@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>2026 성신의 사랑의 큐피트 화살 모으기</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+                     "Noto Sans KR", sans-serif;
+        background: linear-gradient(135deg, #ffe5ef, #fff4f8);
+        color: #4a2434;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 600px;
+        min-height: 100vh;
+        padding: 30px 20px 40px;
+        text-align: center;
+    }
+
+    .title {
+        font-size: 27px;
+        font-weight: 800;
+        line-height: 1.4;
+        margin: 10px 0 8px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        color: #9a687b;
+        margin-bottom: 25px;
+    }
+
+    .roulette-box {
+        background: rgba(255,255,255,0.85);
+        border-radius: 25px;
+        padding: 25px 15px 30px;
+        box-shadow: 0 10px 30px rgba(150, 70, 100, 0.12);
+    }
+
+    .wheel-wrapper {
+        position: relative;
+        width: min(82vw, 360px);
+        height: min(82vw, 360px);
+        margin: 10px auto 25px;
+    }
+
+    .pointer {
+        position: absolute;
+        z-index: 10;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 18px solid transparent;
+        border-right: 18px solid transparent;
+        border-top: 38px solid #e84d78;
+        filter: drop-shadow(0 3px 3px rgba(0,0,0,0.2));
+    }
+
+    canvas {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transition: transform 5s cubic-bezier(0.12, 0.65, 0.18, 1);
+        box-shadow: 0 8px 20px rgba(100,40,70,0.2);
+    }
+
+    .spin-button {
+        border: none;
+        background: #e84d78;
+        color: white;
+        font-size: 20px;
+        font-weight: 800;
+        padding: 16px 45px;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 6px 15px rgba(232,77,120,0.3);
+    }
+
+    .spin-button:active {
+        transform: scale(0.96);
+    }
+
+    .spin-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .result {
+        display: none;
+        margin-top: 25px;
+        padding: 20px;
+        background: #fff0f5;
+        border-radius: 18px;
+    }
+
+    .result-title {
+        font-size: 15px;
+        color: #9a687b;
+    }
+
+    .result-prize {
+        font-size: 27px;
+        font-weight: 900;
+        margin-top: 8px;
+        color: #e13e6d;
+    }
+
+    .info {
+        margin-top: 25px;
+        padding: 22px;
+        background: rgba(255,255,255,0.8);
+        border-radius: 20px;
+        text-align: left;
+    }
+
+    .info h2 {
+        font-size: 18px;
+        margin-top: 0;
+    }
+
+    .info p {
+        font-size: 14px;
+        line-height: 1.8;
+        margin: 5px 0;
+    }
+
+    .heart {
+        font-size: 30px;
+        margin-bottom: 5px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="heart">💘</div>
+
+    <div class="title">
+        2026 성신의 사랑의<br>
+        큐피트 화살 모으기
+    </div>
+
+    <div class="subtitle">
+        큐피트의 화살을 돌려 행운을 확인해보세요!
+    </div>
+
+    <div class="roulette-box">
+
+        <div class="wheel-wrapper">
+            <div class="pointer"></div>
+            <canvas id="wheel" width="600" height="600"></canvas>
+        </div>
+
+        <button class="spin-button" id="spinButton">
+            💘 룰렛 돌리기
+        </button>
+
+        <div class="result" id="result">
+            <div class="result-title">🎉 당신의 결과는?</div>
+            <div class="result-prize" id="resultPrize"></div>
+        </div>
+
+    </div>
+
+    <div class="info">
+
+        <h2>📢 부스 이용 안내</h2>
+
+        <p>💘 룰렛은 1인 1회 참여 가능합니다.</p>
+        <p>💘 룰렛을 돌린 후 결과 화면을 운영진에게 보여주세요.</p>
+        <p>💘 당첨 상품은 준비된 수량에 따라 조기 소진될 수 있습니다.</p>
+        <p>💘 즐거운 축제를 위해 질서를 지켜주세요!</p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+
+const prizes = [
+    "1등 상품 🎁",
+    "2등 상품 💝",
+    "3등 상품 🍬",
+    "특별상 💘",
+    "참가상 💗",
+    "다시 도전!",
+    "행운상 ✨",
+    "참가상 💗"
+];
+
+const colors = [
+    "#ff9fba",
+    "#ffd1df",
+    "#ffb6c9",
+    "#ffe1eb",
+    "#f58aaa",
+    "#ffc4d5",
+    "#ff8eae",
+    "#ffe9f0"
+];
+
+let currentRotation = 0;
+let spinning = false;
+
+function drawWheel() {
+
+    const center = canvas.width / 2;
+    const radius = center;
+
+    const slice = (2 * Math.PI) / prizes.length;
+
+    for (let i = 0; i < prizes.length; i++) {
+
+        const startAngle = i * slice;
+        const endAngle = startAngle + slice;
+
+        ctx.beginPath();
+        ctx.moveTo(center, center);
+        ctx.arc(
+            center,
+            center,
+            radius,
+            startAngle,
+            endAngle
+        );
+        ctx.closePath();
+
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 6;
+        ctx.stroke();
+
+        ctx.save();
+
+        ctx.translate(center, center);
+        ctx.rotate(startAngle + slice / 2);
+
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#5a2638";
+        ctx.font = "bold 25px sans-serif";
+
+        ctx.fillText(
+            prizes[i],
+            radius - 30,
+            9
+        );
+
+        ctx.restore();
+    }
+
+    ctx.beginPath();
+    ctx.arc(center, center, 45, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(center, center, 30, 0, Math.PI * 2);
+    ctx.fillStyle = "#e84d78";
+    ctx.fill();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 22px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("♥", center, center);
+}
+
+drawWheel();
+
+
+document.getElementById("spinButton").addEventListener("click", function() {
+
+    if (spinning) return;
+
+    spinning = true;
+
+    const button = document.getElementById("spinButton");
+    const result = document.getElementById("result");
+
+    button.disabled = true;
+    result.style.display = "none";
+
+    const winner = Math.floor(Math.random() * prizes.length);
+
+    const slice = 360 / prizes.length;
+
+    const targetAngle = 360 - (winner * slice + slice / 2);
+
+    const extraSpins = 360 * 6;
+
+    currentRotation += extraSpins + targetAngle;
+
+    canvas.style.transform =
+        `rotate(${currentRotation}deg)`;
+
+    setTimeout(function() {
+
+        document.getElementById("resultPrize").textContent =
+            prizes[winner];
+
+        result.style.display = "block";
+
+        spinning = false;
+
+        button.disabled = false;
+
+    }, 5100);
+
+});
+
+</script>
+
+</body>
+</html>
