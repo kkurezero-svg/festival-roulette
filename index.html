@@ -1,337 +1,1378 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>2026 성신의 사랑의 큐피트 화살 모으기</title>
+  <title>2026 성신의 사랑의 큐피트 화살</title>
 
-<style>
+  <style>
     * {
-        box-sizing: border-box;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-                     "Noto Sans KR", sans-serif;
-        background: linear-gradient(135deg, #ffe5ef, #fff4f8);
-        color: #4a2434;
-        display: flex;
-        justify-content: center;
+      font-family:
+        "Apple SD Gothic Neo",
+        "Noto Sans KR",
+        sans-serif;
+
+      min-height: 100vh;
+
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.95) 0 3px, transparent 4px),
+        radial-gradient(circle at 80% 15%, rgba(255,255,255,0.8) 0 2px, transparent 3px),
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,0.8) 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.8) 0 3px, transparent 4px),
+        linear-gradient(
+          180deg,
+          #ffd6ea 0%,
+          #ffb8d9 28%,
+          #ff9fc8 55%,
+          #ffb8d9 78%,
+          #ffe1ef 100%
+        );
+
+      background-size:
+        180px 180px,
+        230px 230px,
+        200px 200px,
+        260px 260px,
+        100% 100%;
+
+      color: #64123b;
+      overflow-x: hidden;
     }
 
+    /* ---------------------------
+       배경 하트
+    --------------------------- */
+
+    body::before {
+      content: "♡  ♥  ✦  ♡  ✧  ♥  ♡  ✦  ♡  ♥";
+      position: fixed;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 30px;
+      letter-spacing: 20px;
+      color: rgba(255,255,255,0.65);
+      pointer-events: none;
+      z-index: 0;
+      animation: floating 5s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(12px);
+      }
+    }
+
+    /* ---------------------------
+       전체 컨테이너
+    --------------------------- */
+
     .container {
-        width: 100%;
-        max-width: 600px;
-        min-height: 100vh;
-        padding: 30px 20px 40px;
-        text-align: center;
+      position: relative;
+      z-index: 1;
+
+      width: min(94%, 700px);
+      margin: 0 auto;
+      padding: 28px 0 60px;
+    }
+
+    /* ---------------------------
+       제목
+    --------------------------- */
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .year {
+      display: inline-block;
+
+      padding: 8px 24px;
+      margin-bottom: 8px;
+
+      border-radius: 30px;
+
+      background: linear-gradient(
+        135deg,
+        #d91f69,
+        #ff4f91
+      );
+
+      color: white;
+
+      font-size: 16px;
+      font-weight: 800;
+
+      box-shadow:
+        0 5px 15px rgba(150, 20, 80, 0.25);
+
+      border: 2px solid rgba(255,255,255,0.8);
     }
 
     .title {
-        font-size: 27px;
-        font-weight: 800;
-        line-height: 1.4;
-        margin: 10px 0 8px;
+      font-size: clamp(38px, 10vw, 68px);
+      line-height: 1.05;
+      font-weight: 1000;
+
+      color: #ffffff;
+
+      letter-spacing: -4px;
+
+      text-shadow:
+        0 4px 0 #d91f69,
+        0 7px 0 #a91450,
+        0 10px 20px rgba(110, 10, 50, 0.25);
+
+      margin-bottom: 12px;
     }
 
     .subtitle {
-        font-size: 14px;
-        color: #9a687b;
-        margin-bottom: 25px;
+      font-size: 17px;
+      font-weight: 800;
+      color: #8e174f;
+      letter-spacing: -0.5px;
     }
 
-    .roulette-box {
-        background: rgba(255,255,255,0.85);
-        border-radius: 25px;
-        padding: 25px 15px 30px;
-        box-shadow: 0 10px 30px rgba(150, 70, 100, 0.12);
+    .subtitle::before,
+    .subtitle::after {
+      content: "♡";
+      margin: 0 8px;
+      color: #e31d70;
+      font-size: 20px;
     }
 
-    .wheel-wrapper {
-        position: relative;
-        width: min(82vw, 360px);
-        height: min(82vw, 360px);
-        margin: 10px auto 25px;
+    /* ---------------------------
+       장식 화살
+    --------------------------- */
+
+    .arrow-decoration {
+      position: relative;
+      height: 32px;
+      margin: 4px auto 18px;
+      width: 90%;
+      overflow: hidden;
     }
 
-    .pointer {
-        position: absolute;
-        z-index: 10;
-        top: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 18px solid transparent;
-        border-right: 18px solid transparent;
-        border-top: 38px solid #e84d78;
-        filter: drop-shadow(0 3px 3px rgba(0,0,0,0.2));
+    .arrow-decoration::before {
+      content: "";
+      position: absolute;
+      left: 3%;
+      right: 3%;
+      top: 15px;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        #d71965,
+        #ff4f91,
+        #d71965,
+        transparent
+      );
+      transform: rotate(-3deg);
+    }
+
+    .arrow-decoration::after {
+      content: "💘";
+      position: absolute;
+      right: 3%;
+      top: -2px;
+      font-size: 28px;
+      transform: rotate(-8deg);
+    }
+
+    /* ---------------------------
+       룰렛 카드
+    --------------------------- */
+
+    .roulette-card {
+      background: rgba(255,255,255,0.78);
+
+      border: 3px solid rgba(255,255,255,0.9);
+
+      border-radius: 34px;
+
+      padding: 25px 18px 30px;
+
+      box-shadow:
+        0 20px 50px rgba(132, 15, 75, 0.22),
+        inset 0 0 30px rgba(255,255,255,0.7);
+
+      backdrop-filter: blur(10px);
+
+      text-align: center;
+    }
+
+    .roulette-title {
+      font-size: 22px;
+      font-weight: 1000;
+      color: #b61559;
+      margin-bottom: 18px;
+    }
+
+    /* ---------------------------
+       룰렛
+    --------------------------- */
+
+    .roulette-wrapper {
+      position: relative;
+
+      width: min(88vw, 430px);
+      aspect-ratio: 1 / 1;
+
+      margin: 0 auto 25px;
     }
 
     canvas {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        transition: transform 5s cubic-bezier(0.12, 0.65, 0.18, 1);
-        box-shadow: 0 8px 20px rgba(100,40,70,0.2);
+      width: 100%;
+      height: 100%;
+
+      display: block;
+
+      border-radius: 50%;
+
+      filter:
+        drop-shadow(0 12px 12px rgba(108, 12, 59, 0.25));
     }
 
+    /* 룰렛 위 화살표 */
+
+    .pointer {
+      position: absolute;
+
+      top: -15px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      z-index: 5;
+
+      width: 0;
+      height: 0;
+
+      border-left: 22px solid transparent;
+      border-right: 22px solid transparent;
+      border-top: 48px solid #d91663;
+
+      filter:
+        drop-shadow(0 4px 3px rgba(100,0,40,0.3));
+    }
+
+    .pointer::after {
+      content: "♥";
+
+      position: absolute;
+
+      top: -43px;
+      left: -13px;
+
+      color: #fff;
+      font-size: 18px;
+    }
+
+    /* ---------------------------
+       돌리기 버튼
+    --------------------------- */
+
     .spin-button {
-        border: none;
-        background: #e84d78;
-        color: white;
-        font-size: 20px;
-        font-weight: 800;
-        padding: 16px 45px;
-        border-radius: 50px;
-        cursor: pointer;
-        box-shadow: 0 6px 15px rgba(232,77,120,0.3);
+      border: none;
+
+      width: min(90%, 350px);
+
+      padding: 17px 20px;
+
+      border-radius: 50px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e21868,
+          #ff4d91
+        );
+
+      color: white;
+
+      font-size: 20px;
+      font-weight: 1000;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 0 #a9134e,
+        0 14px 25px rgba(154, 15, 75, 0.25);
+
+      transition: 0.15s;
+
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .spin-button:hover {
+      transform: translateY(-2px);
     }
 
     .spin-button:active {
-        transform: scale(0.96);
+      transform: translateY(5px);
+      box-shadow:
+        0 3px 0 #a9134e,
+        0 8px 15px rgba(154, 15, 75, 0.2);
     }
 
     .spin-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+      background: #c9a8b8;
+      box-shadow: 0 5px 0 #947283;
+      cursor: not-allowed;
     }
+
+    /* ---------------------------
+       결과
+    --------------------------- */
 
     .result {
-        display: none;
-        margin-top: 25px;
-        padding: 20px;
-        background: #fff0f5;
-        border-radius: 18px;
+      margin: 25px auto 0;
+
+      width: min(90%, 400px);
+
+      padding: 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #fff,
+          #fff1f7
+        );
+
+      border: 3px solid #ff77a9;
+
+      border-radius: 25px;
+
+      box-shadow:
+        0 10px 25px rgba(170, 20, 90, 0.15);
+
+      display: none;
+
+      animation: resultPop 0.6s ease;
     }
 
-    .result-title {
-        font-size: 15px;
-        color: #9a687b;
+    .result.show {
+      display: block;
     }
 
-    .result-prize {
-        font-size: 27px;
-        font-weight: 900;
-        margin-top: 8px;
-        color: #e13e6d;
+    @keyframes resultPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+
+      70% {
+        transform: scale(1.06);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
-    .info {
-        margin-top: 25px;
-        padding: 22px;
-        background: rgba(255,255,255,0.8);
-        border-radius: 20px;
-        text-align: left;
+    .result-small {
+      font-size: 15px;
+      font-weight: 800;
+      color: #a51b58;
+      margin-bottom: 4px;
     }
 
-    .info h2 {
-        font-size: 18px;
-        margin-top: 0;
+    .result-number {
+      font-size: 64px;
+      font-weight: 1000;
+      line-height: 1;
+
+      color: #e31869;
+
+      text-shadow:
+        0 3px 0 #ffb1ce;
     }
 
-    .info p {
+    .result-text {
+      font-size: 19px;
+      font-weight: 900;
+      margin-top: 7px;
+      color: #68123d;
+    }
+
+    .result-heart {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    /* ---------------------------
+       사전예약 안내
+    --------------------------- */
+
+    .info-box {
+      margin-top: 25px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,0.96),
+          rgba(255,239,247,0.95)
+        );
+
+      border: 3px solid #ff8fba;
+
+      border-radius: 28px;
+
+      padding: 25px 21px;
+
+      box-shadow:
+        0 15px 35px rgba(139, 16, 75, 0.15);
+    }
+
+    .info-title {
+      display: inline-block;
+
+      position: relative;
+
+      left: 50%;
+      transform: translateX(-50%);
+
+      white-space: nowrap;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e31b69,
+          #ff5a99
+        );
+
+      color: white;
+
+      padding: 10px 28px;
+
+      border-radius: 40px;
+
+      font-size: 20px;
+      font-weight: 1000;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 6px 15px rgba(171, 18, 83, 0.2);
+    }
+
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+
+      font-size: 15px;
+      line-height: 1.65;
+
+      font-weight: 700;
+
+      color: #531435;
+    }
+
+    .info-icon {
+      flex-shrink: 0;
+      font-size: 20px;
+    }
+
+    .example {
+      background: #ffe0ed;
+
+      border-radius: 15px;
+
+      padding: 12px 15px;
+
+      text-align: center;
+
+      font-size: 15px;
+      font-weight: 900;
+
+      color: #b01456;
+
+      border: 2px dashed #ff72a7;
+    }
+
+    .ending {
+      margin-top: 22px;
+
+      text-align: center;
+
+      font-size: 15px;
+
+      color: #df236d;
+
+      font-weight: 900;
+
+      font-style: italic;
+    }
+
+    /* ---------------------------
+       하단
+    --------------------------- */
+
+    .footer {
+      text-align: center;
+
+      margin-top: 25px;
+
+      color: rgba(100, 18, 59, 0.7);
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ---------------------------
+       반짝이
+    --------------------------- */
+
+    .sparkle {
+      position: fixed;
+
+      color: white;
+
+      pointer-events: none;
+
+      animation: sparkle 3s infinite ease-in-out;
+
+      opacity: 0.8;
+
+      z-index: 0;
+    }
+
+    .s1 {
+      top: 20%;
+      left: 8%;
+      font-size: 25px;
+    }
+
+    .s2 {
+      top: 35%;
+      right: 8%;
+      font-size: 20px;
+      animation-delay: 1s;
+    }
+
+    .s3 {
+      top: 65%;
+      left: 5%;
+      font-size: 18px;
+      animation-delay: 1.8s;
+    }
+
+    .s4 {
+      top: 75%;
+      right: 6%;
+      font-size: 27px;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes sparkle {
+      0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.7) rotate(0deg);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(20deg);
+      }
+    }
+
+    /* ---------------------------
+       모바일
+    --------------------------- */
+
+    @media (max-width: 480px) {
+
+      .container {
+        width: 94%;
+        padding-top: 22px;
+      }
+
+      .title {
+        font-size: 40px;
+        letter-spacing: -3px;
+      }
+
+      .subtitle {
         font-size: 14px;
-        line-height: 1.8;
-        margin: 5px 0;
-    }
+      }
 
-    .heart {
-        font-size: 30px;
-        margin-bottom: 5px;
+      .roulette-card {
+        padding: 20px 10px 25px;
+      }
+
+      .roulette-title {
+        font-size: 19px;
+      }
+
+      .info-box {
+        padding: 23px 17px;
+      }
+
+      .info-title {
+        font-size: 18px;
+        padding: 9px 22px;
+      }
+
+      .info-item {
+        font-size: 14px;
+      }
+
+      .result-number {
+        font-size: 58px;
+      }
     }
-</style>
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+  <!-- 배경 장식 -->
+  <div class="sparkle s1">✦</div>
+  <div class="sparkle s2">✧</div>
+  <div class="sparkle s3">♡</div>
+  <div class="sparkle s4">✦</div>
 
-    <div class="heart">💘</div>
+  <main class="container">
 
-    <div class="title">
-        2026 성신의 사랑의<br>
-        큐피트 화살 모으기
-    </div>
+    <!-- 제목 -->
+    <header class="header">
 
-    <div class="subtitle">
-        큐피트의 화살을 돌려 행운을 확인해보세요!
-    </div>
+      <div class="year">
+        💗 2026 성신의 💗
+      </div>
 
-    <div class="roulette-box">
+      <h1 class="title">
+        사랑의<br>
+        큐피트 화살
+      </h1>
 
-        <div class="wheel-wrapper">
-            <div class="pointer"></div>
-            <canvas id="wheel" width="600" height="600"></canvas>
+      <div class="subtitle">
+        당신의 운명은 몇 번의 기회일까요?
+      </div>
+
+    </header>
+
+    <div class="arrow-decoration"></div>
+
+
+    <!-- 룰렛 -->
+    <section class="roulette-card">
+
+      <h2 class="roulette-title">
+        💘 나에게 주어진 사랑의 기회를 뽑아보세요!
+      </h2>
+
+      <div class="roulette-wrapper">
+
+        <div class="pointer"></div>
+
+        <canvas id="rouletteCanvas"></canvas>
+
+      </div>
+
+
+      <button
+        id="spinButton"
+        class="spin-button"
+        onclick="spinRoulette()"
+      >
+        💘 룰렛 돌리기
+      </button>
+
+
+      <!-- 결과 -->
+      <div
+        id="result"
+        class="result"
+      >
+
+        <div class="result-heart">
+          💗 ✨ 💗
         </div>
 
-        <button class="spin-button" id="spinButton">
-            💘 룰렛 돌리기
-        </button>
-
-        <div class="result" id="result">
-            <div class="result-title">🎉 당신의 결과는?</div>
-            <div class="result-prize" id="resultPrize"></div>
+        <div class="result-small">
+          당신에게 주어진 사랑의 기회는
         </div>
 
-    </div>
+        <div
+          id="resultNumber"
+          class="result-number"
+        >
+          0
+        </div>
 
-    <div class="info">
+        <div class="result-text">
+          회 입니다! 💘
+        </div>
 
-        <h2>📢 부스 이용 안내</h2>
+      </div>
 
-        <p>💘 룰렛은 1인 1회 참여 가능합니다.</p>
-        <p>💘 룰렛을 돌린 후 결과 화면을 운영진에게 보여주세요.</p>
-        <p>💘 당첨 상품은 준비된 수량에 따라 조기 소진될 수 있습니다.</p>
-        <p>💘 즐거운 축제를 위해 질서를 지켜주세요!</p>
-
-    </div>
-
-</div>
+    </section>
 
 
-<script>
+    <!-- 사전예약 안내 -->
+    <section class="info-box">
 
-const canvas = document.getElementById("wheel");
-const ctx = canvas.getContext("2d");
+      <div class="info-title">
+        💗 사전예약 안내 💗
+      </div>
 
-const prizes = [
-    "1등 상품 🎁",
-    "2등 상품 💝",
-    "3등 상품 🍬",
-    "특별상 💘",
-    "참가상 💗",
-    "다시 도전!",
-    "행운상 ✨",
-    "참가상 💗"
-];
+      <div class="info-list">
 
-const colors = [
-    "#ff9fba",
-    "#ffd1df",
-    "#ffb6c9",
-    "#ffe1eb",
-    "#f58aaa",
-    "#ffc4d5",
-    "#ff8eae",
-    "#ffe9f0"
-];
+        <div class="info-item">
+          <span class="info-icon">♡</span>
 
-let currentRotation = 0;
-let spinning = false;
+          <span>
+            본 룰렛은 축제 당일 진행되는
+            <strong>「사랑의 큐피트 화살」의 사전예약</strong>입니다.
+          </span>
+        </div>
 
-function drawWheel() {
 
-    const center = canvas.width / 2;
-    const radius = center;
+        <div class="info-item">
+          <span class="info-icon">🎯</span>
 
-    const slice = (2 * Math.PI) / prizes.length;
+          <span>
+            룰렛에서 나온 숫자는
+            <strong>본인의 번호를 화살판에 기재할 수 있는 횟수</strong>를
+            의미합니다.
+          </span>
+        </div>
 
-    for (let i = 0; i < prizes.length; i++) {
 
-        const startAngle = i * slice;
-        const endAngle = startAngle + slice;
+        <div class="example">
+          💝 예시) 룰렛 결과가 <strong>5</strong>
+          → 본인의 번호를 화살판에 <strong>5회</strong> 기재 가능
+        </div>
+
+
+        <div class="info-item">
+          <span class="info-icon">💘</span>
+
+          <span>
+            사전예약 후
+            <strong>축제 당일 부스에 방문</strong>해주세요!
+          </span>
+        </div>
+
+
+        <div class="info-item">
+          <span class="info-icon">📱</span>
+
+          <span>
+            룰렛을 돌린 후 나온
+            <strong>결과 화면을 운영진에게 보여주세요.</strong>
+          </span>
+        </div>
+
+
+        <div class="info-item">
+          <span class="info-icon">💗</span>
+
+          <span>
+            예약된 횟수만큼
+            <strong>본인의 번호를 기재</strong>할 수 있습니다.
+          </span>
+        </div>
+
+      </div>
+
+
+      <p class="ending">
+        사랑의 큐피트 화살이 당신의 마음을 향해 발사되길… 💘
+      </p>
+
+    </section>
+
+
+    <footer class="footer">
+      2026 성신의 축제 · 사랑의 큐피트 화살
+    </footer>
+
+  </main>
+
+
+  <script>
+
+    /* =========================================
+       룰렛 설정
+    ========================================= */
+
+    const canvas = document.getElementById("rouletteCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const wheelNumbers = [
+      2,
+      3,
+      5,
+      2,
+      3,
+      5,
+      2,
+      3
+    ];
+
+    let rotation = 0;
+    let spinning = false;
+
+
+    /* =========================================
+       캔버스 크기 설정
+    ========================================= */
+
+    function resizeCanvas() {
+
+      const size = Math.min(
+        window.innerWidth * 0.88,
+        430
+      );
+
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = size * dpr;
+      canvas.height = size * dpr;
+
+      canvas.style.width = size + "px";
+      canvas.style.height = size + "px";
+
+      ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+      );
+
+      drawRoulette(size);
+
+    }
+
+
+    /* =========================================
+       룰렛 그리기
+    ========================================= */
+
+    function drawRoulette(size) {
+
+      const center = size / 2;
+      const radius = size / 2 - 10;
+
+      ctx.clearRect(
+        0,
+        0,
+        size,
+        size
+      );
+
+
+      /* 바깥 링 */
+
+      ctx.beginPath();
+
+      ctx.arc(
+        center,
+        center,
+        radius,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "#e92c73";
+      ctx.stroke();
+
+
+      /* 룰렛 회전 */
+
+      ctx.save();
+
+      ctx.translate(
+        center,
+        center
+      );
+
+      ctx.rotate(rotation);
+
+      ctx.translate(
+        -center,
+        -center
+      );
+
+
+      const sliceAngle =
+        Math.PI * 2 / wheelNumbers.length;
+
+
+      /* 각 칸 */
+
+      for (
+        let i = 0;
+        i < wheelNumbers.length;
+        i++
+      ) {
+
+        const startAngle =
+          -Math.PI / 2 +
+          i * sliceAngle;
+
+        const endAngle =
+          startAngle +
+          sliceAngle;
+
 
         ctx.beginPath();
-        ctx.moveTo(center, center);
-        ctx.arc(
-            center,
-            center,
-            radius,
-            startAngle,
-            endAngle
+
+        ctx.moveTo(
+          center,
+          center
         );
+
+        ctx.arc(
+          center,
+          center,
+          radius - 8,
+          startAngle,
+          endAngle
+        );
+
         ctx.closePath();
 
-        ctx.fillStyle = colors[i];
+
+        /* 핑크 / 연핑크 교차 */
+
+        if (i % 2 === 0) {
+          ctx.fillStyle = "#ff4f91";
+        } else {
+          ctx.fillStyle = "#ffd6e7";
+        }
+
         ctx.fill();
 
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 6;
+
+        /* 구분선 */
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#d91f69";
         ctx.stroke();
+
+
+        /* 숫자 */
+
+        const textAngle =
+          startAngle +
+          sliceAngle / 2;
+
+        const textRadius =
+          radius * 0.64;
+
+        const x =
+          center +
+          Math.cos(textAngle) *
+          textRadius;
+
+        const y =
+          center +
+          Math.sin(textAngle) *
+          textRadius;
+
 
         ctx.save();
 
-        ctx.translate(center, center);
-        ctx.rotate(startAngle + slice / 2);
+        ctx.translate(x, y);
 
-        ctx.textAlign = "right";
-        ctx.fillStyle = "#5a2638";
-        ctx.font = "bold 25px sans-serif";
+        ctx.rotate(textAngle + Math.PI / 2);
 
-        ctx.fillText(
-            prizes[i],
-            radius - 30,
-            9
+
+        ctx.font =
+          `900 ${Math.max(30, size * 0.105)}px Arial`;
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+
+        /* 숫자 테두리 */
+
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = "rgba(255,255,255,0.9)";
+
+        ctx.strokeText(
+          wheelNumbers[i],
+          0,
+          0
         );
 
+
+        ctx.fillStyle =
+          i % 2 === 0
+            ? "#9e124d"
+            : "#d71961";
+
+
+        ctx.fillText(
+          wheelNumbers[i],
+          0,
+          0
+        );
+
+
         ctx.restore();
+
+
+        /* 작은 하트 장식 */
+
+        const heartAngle =
+          startAngle +
+          sliceAngle * 0.18;
+
+        const heartRadius =
+          radius * 0.82;
+
+        const hx =
+          center +
+          Math.cos(heartAngle) *
+          heartRadius;
+
+        const hy =
+          center +
+          Math.sin(heartAngle) *
+          heartRadius;
+
+
+        ctx.font =
+          `${Math.max(10, size * 0.035)}px Arial`;
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.fillStyle = "rgba(255,255,255,0.8)";
+
+        ctx.fillText(
+          "♥",
+          hx,
+          hy
+        );
+
+      }
+
+
+      ctx.restore();
+
+
+      /* 중앙 하트 */
+
+      ctx.beginPath();
+
+      ctx.arc(
+        center,
+        center,
+        radius * 0.16,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fillStyle = "#e31b69";
+      ctx.fill();
+
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+
+
+      ctx.font =
+        `${radius * 0.12}px Arial`;
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.fillStyle = "#ffffff";
+
+      ctx.fillText(
+        "♥",
+        center,
+        center + 2
+      );
+
+
+      /* 바깥 장식 점 */
+
+      for (
+        let i = 0;
+        i < 16;
+        i++
+      ) {
+
+        const angle =
+          Math.PI * 2 / 16 * i;
+
+        const dotRadius =
+          radius - 3;
+
+        const x =
+          center +
+          Math.cos(angle) *
+          dotRadius;
+
+        const y =
+          center +
+          Math.sin(angle) *
+          dotRadius;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+          x,
+          y,
+          4,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fillStyle = "#ffd85c";
+
+        ctx.fill();
+
+      }
+
     }
 
-    ctx.beginPath();
-    ctx.arc(center, center, 45, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffffff";
-    ctx.fill();
 
-    ctx.beginPath();
-    ctx.arc(center, center, 30, 0, Math.PI * 2);
-    ctx.fillStyle = "#e84d78";
-    ctx.fill();
+    /* =========================================
+       룰렛 돌리기
+    ========================================= */
 
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 22px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("♥", center, center);
-}
+    function spinRoulette() {
 
-drawWheel();
+      if (spinning) {
+        return;
+      }
+
+      spinning = true;
+
+      const button =
+        document.getElementById("spinButton");
+
+      const result =
+        document.getElementById("result");
+
+      const resultNumber =
+        document.getElementById("resultNumber");
 
 
-document.getElementById("spinButton").addEventListener("click", function() {
+      button.disabled = true;
 
-    if (spinning) return;
+      button.textContent =
+        "💘 사랑의 화살이 날아가는 중…";
 
-    spinning = true;
 
-    const button = document.getElementById("spinButton");
-    const result = document.getElementById("result");
+      result.classList.remove("show");
 
-    button.disabled = true;
-    result.style.display = "none";
 
-    const winner = Math.floor(Math.random() * prizes.length);
+      /* 랜덤 당첨 칸 */
 
-    const slice = 360 / prizes.length;
+      const selectedIndex =
+        Math.floor(
+          Math.random() *
+          wheelNumbers.length
+        );
 
-    const targetAngle = 360 - (winner * slice + slice / 2);
 
-    const extraSpins = 360 * 6;
+      const selectedNumber =
+        wheelNumbers[selectedIndex];
 
-    currentRotation += extraSpins + targetAngle;
 
-    canvas.style.transform =
-        `rotate(${currentRotation}deg)`;
+      /*
+        선택된 칸이 포인터(위쪽)에 오도록
+        회전 각도 계산
+      */
 
-    setTimeout(function() {
+      const sliceAngle =
+        Math.PI * 2 /
+        wheelNumbers.length;
 
-        document.getElementById("resultPrize").textContent =
-            prizes[winner];
 
-        result.style.display = "block";
+      const targetAngle =
+        selectedIndex *
+        sliceAngle +
+        sliceAngle / 2;
 
-        spinning = false;
 
-        button.disabled = false;
+      const extraSpins =
+        6 + Math.floor(
+          Math.random() * 3
+        );
 
-    }, 5100);
 
-});
+      const targetRotation =
+        rotation +
+        extraSpins * Math.PI * 2 +
+        (
+          -targetAngle -
+          rotation
+        );
 
-</script>
+
+      const startRotation =
+        rotation;
+
+      const duration = 4500;
+
+      const startTime =
+        performance.now();
+
+
+      function animate(time) {
+
+        const elapsed =
+          time - startTime;
+
+        const progress =
+          Math.min(
+            elapsed / duration,
+            1
+          );
+
+
+        /*
+          easeOutCubic
+          처음엔 빠르게,
+          마지막엔 천천히
+        */
+
+        const eased =
+          1 -
+          Math.pow(
+            1 - progress,
+            3
+          );
+
+
+        rotation =
+          startRotation +
+          (
+            targetRotation -
+            startRotation
+          ) * eased;
+
+
+        drawRoulette(
+          Math.min(
+            window.innerWidth * 0.88,
+            430
+          )
+        );
+
+
+        if (progress < 1) {
+
+          requestAnimationFrame(
+            animate
+          );
+
+        } else {
+
+          finishSpin(
+            selectedNumber
+          );
+
+        }
+
+      }
+
+
+      requestAnimationFrame(
+        animate
+      );
+
+    }
+
+
+    /* =========================================
+       결과 표시
+    ========================================= */
+
+    function finishSpin(number) {
+
+      const button =
+        document.getElementById("spinButton");
+
+      const result =
+        document.getElementById("result");
+
+      const resultNumber =
+        document.getElementById("resultNumber");
+
+
+      resultNumber.textContent =
+        number;
+
+
+      result.classList.add("show");
+
+
+      button.disabled = false;
+
+      button.textContent =
+        "💘 다시 룰렛 돌리기";
+
+
+      spinning = false;
+
+
+      /* 결과 카드 위치로 살짝 이동 */
+
+      setTimeout(() => {
+
+        result.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+      }, 200);
+
+    }
+
+
+    /* =========================================
+       화면 크기 변경
+    ========================================= */
+
+    window.addEventListener(
+      "resize",
+      resizeCanvas
+    );
+
+
+    /* 최초 실행 */
+
+    resizeCanvas();
+
+  </script>
 
 </body>
 </html>
